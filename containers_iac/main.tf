@@ -5,6 +5,12 @@ data "google_project" "project" {
 ## ------
 ## Enable GCP APIs
 ## ------
+resource "google_project_iam_member" "serviceusage_viewer" {
+  project = data.google_project.project.project_id
+  role    = "roles/serviceusage.viewer"
+  member  = "serviceAccount:${data.google_service_account.sa.email}"
+}
+
 resource "google_project_service" "enabled_apis" {
   for_each = toset(local.gcp_services)
   project  = data.google_project.project.project_id
