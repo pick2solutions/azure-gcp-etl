@@ -6,7 +6,7 @@ resource "google_cloud_run_v2_job" "azure_to_gcs" {
   template {
     template{
       containers {
-      image = "us-central1-docker.pkg.dev/${data.google_project.project.project_id}/pick2-bq-demo/azure-to-gcs"
+      image = "us-central1-docker.pkg.dev/${data.google_project.project.project_id}/pick2-etl-demo/azure-to-gcs"
       env {
         name = "AZURE_SQL_SERVER"   
         value = "${var.sql_server_name}.database.windows.net"
@@ -40,13 +40,12 @@ resource "google_cloud_run_v2_job" "gcs_to_bq" {
   template {
     template {
       containers {
-        image = "us-central1-docker.pkg.dev/${data.google_project.project.project_id}/pick2-bq-demo/gcs-to-bq"
+        image = "us-central1-docker.pkg.dev/${data.google_project.project.project_id}/pick2-etl-demo/gcs-to-bq"
       }
     }
   }
 }
 
-# todo: compute storage account needs BQ access.
 
 # Define the storage bucket and the service account for Eventarc
 resource "google_storage_bucket_iam_member" "eventarc_bucket_permissions" {
