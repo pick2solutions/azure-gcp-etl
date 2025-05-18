@@ -3,6 +3,15 @@ data "google_project" "project" {
 }
 
 ## ------
+## Enable GCP APIs
+## ------
+resource "google_project_service" "enabled_apis" {
+  for_each = toset(local.gcp_services)
+  project  = data.google_project.project.project_id
+  service  = each.key
+}
+
+## ------
 ## Enable GCP Artifact Registry
 ## ------
 resource "google_artifact_registry_repository" "repo" {
