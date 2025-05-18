@@ -31,14 +31,9 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-            token_format: "id_token"
             project_id: ${{ vars.GCP_PROJECT_ID }}
             workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
             service_account: ${{ vars.SERVICE_ACCOUNT }}
-
-      - name: Decode OIDC token
-        run: |
-          echo "${{ steps.auth.outputs.id_token }}" | cut -d '.' -f2 | base64 -d | jq
 
 
       - name: Terraform Init
@@ -80,7 +75,6 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-            token_format: "id_token"
             project_id: ${{ vars.GCP_PROJECT_ID }}
             workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
             service_account: ${{ vars.SERVICE_ACCOUNT }}
