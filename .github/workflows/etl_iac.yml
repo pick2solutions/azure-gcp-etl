@@ -9,6 +9,7 @@ on:
 
 jobs:
   terraform:
+    name: Deploy ETL Infrastructure
     runs-on: ubuntu-latest
     environment: main
     permissions: 
