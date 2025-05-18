@@ -7,7 +7,7 @@ import tempfile
 def gcs_to_bigquery(bucket_name, files_and_tables):
     # Initialize clients
     storage_client = storage.Client()
-    bq_client = bigquery.Client(project="pick2-bigquery-demo")
+    bq_client = bigquery.Client(project="pick2-etl-demo")
 
     for file_name, table_id in files_and_tables:
         # Download the file from GCS
@@ -27,8 +27,8 @@ def gcs_to_bigquery(bucket_name, files_and_tables):
 def main():
     bucket_name = "pick2-etl-rawfiles"
     files_and_tables = [
-        ("energy_data_export.csv", "pick2-bigquery-demo.etl_demo.energy_data"),
-        ("energy_data_export2.csv", "pick2-bigquery-demo.etl_demo.energy_data_v2")
+        ("energy_data_export.csv", "pick2-etl-demo.etl_demo.energy_data"),
+        ("energy_data_export2.csv", "pick2-etl-demo.etl_demo.energy_data_v2")
     ]
 
     if not bucket_name or not files_and_tables:
