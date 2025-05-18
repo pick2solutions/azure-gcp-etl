@@ -16,7 +16,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = "terraform-state-bq"
+    bucket = "pick2-terraform-state-etl"
     prefix = "terraform/state"
   }
 }
