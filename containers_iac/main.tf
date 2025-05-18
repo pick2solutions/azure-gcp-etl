@@ -15,6 +15,7 @@ resource "google_project_service" "enabled_apis" {
   for_each = toset(local.gcp_services)
   project  = data.google_project.project.project_id
   service  = each.key
+  depends_on = [ google_project_iam_member.serviceusage_viewer ]
 }
 
 ## ------
