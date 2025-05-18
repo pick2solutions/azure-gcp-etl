@@ -1,14 +1,14 @@
 name: Build ETL Infrastructure
 
-# Only trigger, when the build workflow succeeded
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Deploy Artifact Registry and Images"]
     types:
       - completed
 
 jobs:
-  notify:
+  terraform:
     runs-on: ubuntu-latest
     permissions: 
         id-token: write
