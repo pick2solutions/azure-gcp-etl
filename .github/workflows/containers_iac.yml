@@ -15,7 +15,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: cloud_run_containers
+        working-directory: containers_iac
 
     steps:
       - name: Checkout Code
