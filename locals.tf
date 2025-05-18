@@ -5,6 +5,6 @@ locals {
     "run.googleapis.com",
     "cloudfunctions.googleapis.com",
     "cloudbuild.googleapis.com",
-    "eventarc.googleapis.com"
+    "eventarc.googleapis.com",
   ]
 }

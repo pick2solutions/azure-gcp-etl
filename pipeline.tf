@@ -46,14 +46,6 @@ resource "google_cloud_run_v2_job" "gcs_to_bq" {
   }
 }
 
-
-# Define the storage bucket and the service account for Eventarc
-resource "google_storage_bucket_iam_member" "eventarc_bucket_permissions" {
-  bucket = google_storage_bucket.rawfiles.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-eventarc.iam.gserviceaccount.com"
-}
-
 resource "google_project_iam_member" "gcs_pubsub_publisher_role" {
   project = data.google_project.project.project_id
   role    = "roles/pubsub.publisher"
