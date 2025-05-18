@@ -22,7 +22,7 @@ resource "google_artifact_registry_repository" "repo" {
 ## Add IAM binding.
 ## ------
 data "google_service_account" "sa" {
-  account_id = "bigquery-pipeline-demo"
+  account_id = "github-actions"
   project    = data.google_project.project.project_id
 }
 
