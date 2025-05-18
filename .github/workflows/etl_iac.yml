@@ -1,0 +1,78 @@
+name: Build ETL Infrastructure
+
+# Only trigger, when the build workflow succeeded
+on:
+  workflow_run:
+    workflows: ["Deploy Artifact Registry and Images"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    permissions: 
+        id-token: write
+        contents: read  
+        issues: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: Azure/login@v1.5.0
+        with:
+          client-id: ${{ vars.ARM_CLIENT_ID }}
+          tenant-id: ${{ vars.ARM_TENANT_ID }}
+          subscription-id: ${{ vars.ARM_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.11.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan
+        env:
+          TF_VAR_org_id: ${{ vars.GCP_ORG_ID }}
+          TF_VAR_billing_id: ${{ vars.BILLING_ID }}
+          TF_VAR_sql_server_name: ${{ vars.SQL_SERVER_NAME }}
+          TF_VAR_sql_admin_username: ${{ vars.SQL_ADMIN_USERNAME }}
+          TF_VAR_sql_admin_password: ${{ secrets.SQL_ADMIN_PASSWORD }}
+          TF_VAR_gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
+          TF_VAR_azure_client_id: ${{ vars.ARM_CLIENT_ID }}
+          TF_VAR_azure_subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          TF_VAR_azure_tenant_id: ${{ vars.ARM_TENANT_ID }}
+          TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+
+      - name: Approve Terraform Plan
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: dppick2solutions
+
+      # Apply Terraform changes (only on push to main)
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
+        env:
+            TF_VAR_org_id: ${{ vars.GCP_ORG_ID }}
+            TF_VAR_billing_id: ${{ vars.BILLING_ID }}
+            TF_VAR_sql_server_name: ${{ vars.SQL_SERVER_NAME }}
+            TF_VAR_sql_admin_username: ${{ vars.SQL_ADMIN_USERNAME }}
+            TF_VAR_sql_admin_password: ${{ secrets.SQL_ADMIN_PASSWORD }}
+            TF_VAR_gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
+            TF_VAR_azure_client_id: ${{ vars.ARM_CLIENT_ID }}
+            TF_VAR_azure_subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
+            GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            TF_VAR_azure_tenant_id: ${{ vars.ARM_TENANT_ID }}
+            TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+  
