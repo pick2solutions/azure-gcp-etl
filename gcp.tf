@@ -30,7 +30,7 @@ module "bigquery" {
 ## Cloud Storage - Files on GCP Side
 ## ------
 resource "google_storage_bucket" "rawfiles" {
-  name     = "etl-rawfiles"
+  name     = "pick2-etl-rawfiles"
   location = "us-central1"
   project  = data.google_project.project.project_id
 }
