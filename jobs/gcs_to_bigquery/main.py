@@ -27,8 +27,8 @@ def gcs_to_bigquery(bucket_name, files_and_tables):
 def main():
     bucket_name = "pick2-etl-rawfiles"
     files_and_tables = [
-        ("energy_data_export.csv", "pick2-etl-demo.etl_demo.energy_data"),
-        ("energy_data_export2.csv", "pick2-etl-demo.etl_demo.energy_data_v2")
+        ("energy_data_export.csv", "pick2-etl-demo.etl_dataset.energy_data"),
+        ("energy_data_export2.csv", "pick2-etl-demo.etl_dataset.energy_data_v2")
     ]
 
     if not bucket_name or not files_and_tables:
